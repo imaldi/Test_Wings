@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.product.ProductListActivity">
+    tools:context=".ProductListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productListId"
@@ -26,4 +26,7 @@
         android:textColor="@color/white"
         android:text="Checkout"
         />
+
+
+
 </RelativeLayout>
