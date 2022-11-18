@@ -10,13 +10,15 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.aim2u.test_wings.ProductListFragmentDirections
 import com.aim2u.test_wings.R
 import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.ListItemBinding
 
 class ItemAdapter(
-    private val context: Context,
-    private val dataset: List<Product>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(){
+    private val dataset: List<Product>,
+    val onClick: (Product) -> Unit
+    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemBinding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,17 +28,7 @@ class ItemAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val product: Product = dataset[position]
         holder.itemView.setOnClickListener {
-            Toast.makeText(
-                context,
-                "${product.productName}",
-                Toast.LENGTH_SHORT
-            ).show()
-
-//            Navigation.createNavigateOnClickListener(R.id.action_productListFragment_to_productDetailFragment, null)
-            holder.itemView.findNavController().navigate(R.id.action_productListFragment_to_productDetailFragment)
-//            val intent = Intent(context, ProductDetailActivity::class.java)
-//            context.startActivity(intent)
-
+            onClick(product)
         }
         holder.bind(product)
     }

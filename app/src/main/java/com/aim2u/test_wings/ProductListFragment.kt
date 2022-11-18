@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aim2u.test_wings.adapter.ItemAdapter
 import com.aim2u.test_wings.data.datasource.ProductDataSource
@@ -54,7 +56,18 @@ class ProductListFragment : Fragment() {
         val recyclerView = binding.productListId
         recyclerView.layoutManager = LinearLayoutManager(context)
         // cari cara amannya
-        val adapter = ItemAdapter(requireContext(), myDataSet)
+        val adapter = ItemAdapter(myDataSet){
+                product ->
+            Toast.makeText(
+                context,
+                "${product.productName}",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(product.productCode)
+            findNavController(this).navigate(action)
+
+        }
         recyclerView.adapter = adapter
         // size of this RecyclerView is fixed
         recyclerView.setHasFixedSize(true)
