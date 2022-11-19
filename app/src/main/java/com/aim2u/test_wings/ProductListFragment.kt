@@ -2,16 +2,23 @@ package com.aim2u.test_wings
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aim2u.test_wings.adapter.ItemAdapter
 import com.aim2u.test_wings.data.datasource.ProductDataSource
+import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
+import com.aim2u.test_wings.ui.shared_view_model.SharedViewModel
+import com.aim2u.test_wings.ui.shared_view_model.SharedViewModelFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,19 +31,23 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ProductListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var binding: FragmentProductListBinding
+    private val sharedViewModel: SharedViewModel by activityViewModels{
+//        viewModelFactory {
+            // FIXME ini mungkin error karena null
+            var application = (activity?.application as WingsApplication)
+        Log.d("activityViewModels","Hello")
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        SharedViewModelFactory(
+                application.productRepository,
+                application.transactionHeaderRepository,
+                application.transactionDetailRepository,
+                application.applicationScope
+            )
+//        }
     }
+    private lateinit var myDataSet: List<Product>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,13 +56,25 @@ class ProductListFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_product_list, container, false)
         binding = FragmentProductListBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myDataSet = ProductDataSource().loadProducts()
+//            ProductDataSource().loadProducts()
+
+
+        myDataSet = sharedViewModel.allProduct.value ?: listOf()
+        Log.d("List Product bef", myDataSet.toString())
+
+        if(myDataSet.isEmpty()){
+            sharedViewModel.setAllProduct()
+        }
+
+        Log.d("List Product", myDataSet.toString())
+//        val myImmutableDataSet = myDataSet
 
         val recyclerView = binding.productListId
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -68,9 +91,17 @@ class ProductListFragment : Fragment() {
             findNavController(this).navigate(action)
 
         }
+//        sharedViewModel.allProduct.observe(viewLifecycleOwner) {
+//            adapter.submitList(it) = it
+//        }
+
+
+//        sharedViewModel.allProduct.observe(viewLifecycleOwner, Observer {
+//
+//        })
         recyclerView.adapter = adapter
         // size of this RecyclerView is fixed
-        recyclerView.setHasFixedSize(true)
+//        recyclerView.setHasFixedSize(true)
     }
 
     override fun onAttach(context: Context) {

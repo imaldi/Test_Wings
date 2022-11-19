@@ -1,11 +1,9 @@
-package com.aim2u.test_wings.data.datasource.local.dao
+package com.aim2u.test_wings.data.datasource.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.aim2u.test_wings.data.model.Product
-import com.aim2u.test_wings.data.model.TransactionDetail
 import com.aim2u.test_wings.data.model.TransactionHeader
 
 @Dao

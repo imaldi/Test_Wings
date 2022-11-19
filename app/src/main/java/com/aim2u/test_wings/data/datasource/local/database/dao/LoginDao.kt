@@ -1,11 +1,10 @@
-package com.aim2u.test_wings.data.datasource.local.dao
+package com.aim2u.test_wings.data.datasource.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.aim2u.test_wings.data.model.Login
-import com.aim2u.test_wings.data.model.Product
 
 @Dao
 interface LoginDao {
@@ -15,5 +14,8 @@ interface LoginDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(login: Login)
+
+    @Query("SELECT * FROM login_table WHERE user = :userName AND password = :password ")
+    fun login(userName: String, password: String): Login?
 
 }

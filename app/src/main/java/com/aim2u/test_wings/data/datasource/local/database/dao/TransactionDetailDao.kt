@@ -1,4 +1,4 @@
-package com.aim2u.test_wings.data.datasource.local.dao
+package com.aim2u.test_wings.data.datasource.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.aim2u.test_wings.data.model.Product
 
 @Dao
-interface ProductDao {
+interface TransactionDetailDao {
     @Insert
     fun insertAll(vararg product: Product)
 
@@ -16,4 +16,5 @@ interface ProductDao {
 
     @Query("SELECT * FROM product_table")
     fun getAll(): List<Product>
+
 }

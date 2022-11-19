@@ -1,6 +1,6 @@
-package com.aim2u.test_wings.data
+package com.aim2u.test_wings.ui.login_fragment.data
 
-import com.aim2u.test_wings.data.model.LoggedInUser
+import com.aim2u.test_wings.ui.login_fragment.data.model.LoggedInUser
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -29,7 +29,6 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
-        // nanti disini atur tentang urusan dengan Shared Preference dan cek apakah data ada di db
         val result = dataSource.login(username, password)
 
         if (result is Result.Success) {

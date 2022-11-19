@@ -6,32 +6,35 @@ import androidx.room.Entity
 
 @Entity(
     tableName = "transaction_detail",
-    ignoredColumns = [
-        "product_name",
-        "discount",
-        "dimension",
-        "user_name",
-        "total",
-        "date"
-    ]
+    primaryKeys = ["document_code","document_number"],
+//    ignoredColumns = [
+//        "product_name",
+//        "discount",
+//        "dimension",
+//        "user_name",
+//        "total",
+//        "date"
+//    ]
 )
 data class TransactionDetail(
-    @Embedded
-    val transactionHeader: TransactionHeader,
+    @ColumnInfo(name = "document_code")
+    val documentCode: String,
+    @ColumnInfo(name = "document_number")
+    val documentNumber: String,
     @ColumnInfo(name = "quantity")
     val quantity: String,
     @ColumnInfo(name = "subtotal")
     val subTotal: String,
-    @Embedded
-    val product: Product,
-//    @ColumnInfo(name = "product_code_trans")
-//    val productCode: String, // foreign key
-//    @ColumnInfo(name = "price_trans")
-//    val price: Int,
-//    @ColumnInfo(name = "unit_trans")
-//    val unit: String,
-//    @ColumnInfo(name = "currency_trans")
-//    val currency: String,
+//    @Embedded
+//    val product: Product,
+    @ColumnInfo(name = "product_code")
+    val productCode: String, // foreign key
+    @ColumnInfo(name = "price")
+    val price: Int,
+    @ColumnInfo(name = "unit")
+    val unit: String,
+    @ColumnInfo(name = "currency")
+    val currency: String,
 
 
     )

@@ -22,9 +22,9 @@ private const val ARG_PARAM2 = "param2"
 class ProductDetailFragment : Fragment() {
     private lateinit var binding: FragmentProductDetailBinding
     private val safeArgs: ProductDetailFragmentArgs by navArgs()
-    private val productCode by lazy {
-        safeArgs.productId
-    }
+    private var productCode: String? = null
+//    by lazy {
+//    }
 
 
     override fun onCreateView(
@@ -38,6 +38,8 @@ class ProductDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        productCode = safeArgs.productId
+
         binding.productCode.text = productCode
     }
 

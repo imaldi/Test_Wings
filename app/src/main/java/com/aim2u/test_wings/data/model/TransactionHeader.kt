@@ -21,7 +21,7 @@ data class TransactionHeader (
     val documentCode: String,
     @ColumnInfo(name = "document_number")
     val documentNumber: String,
-    @ColumnInfo(name = "user_name")
+    @ColumnInfo(name = "user_name", index = true)
     val user: String,
     @ColumnInfo(name = "total")
     val total: Int,
