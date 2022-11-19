@@ -15,6 +15,7 @@ import com.aim2u.test_wings.data.repository.ProductRepository
 import com.aim2u.test_wings.data.repository.TransactionDetailRepository
 import com.aim2u.test_wings.data.repository.TransactionHeaderRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class SharedViewModel(
@@ -26,8 +27,11 @@ class SharedViewModel(
     private val _isLoggedIn = MutableLiveData<Boolean>(false)
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-//    private val _allProduct = MutableLiveData<List<Product>>()
-    val allProduct: LiveData<List<Product>> = _productRepository.allProduct.asLiveData()
+    private val _allProduct = MutableLiveData<List<Product>>(
+//    _productRepository.allProduct.asLiveData().value
+    listOf()
+    )
+    val allProduct: LiveData<List<Product>> = _allProduct
 
     private val _selectedProduct = MutableLiveData<List<Product>>(listOf())
     val selectedProduct: LiveData<List<Product>> = _selectedProduct
@@ -38,13 +42,31 @@ class SharedViewModel(
     private val _transactionDetail = MutableLiveData<List<TransactionDetail>>(listOf())
     val transactionDetail: LiveData<List<TransactionDetail>> = _transactionDetail
 
+    private val _simpleNumber = MutableLiveData<Int>(0)
+    val simpleNumber: LiveData<Int> = _simpleNumber
+
     fun setAllProduct() {
-        scope.launch {
-            _productRepository.deleteAll()
-            _productRepository.insertAll(ProductDataSource().loadProducts())
-            val products = _productRepository.allProduct
-            Log.d("Products",products.toString())
-        }
+//        var products: List<Product> = listOf()
+//        scope.launch {
+////            _productRepository.deleteAll()
+//            val rowIds = _productRepository.insertAll(ProductDataSource().loadProducts())
+//            products = _productRepository.allProduct.asLiveData().value ?: listOf()
+//
+//            Log.d("Products rowIds",rowIds.toString())
+//        }
+//            _allProduct.value = ProductDataSource().loadProducts()
+////            _allProduct.value = products
+    }
+
+    fun incrementSimpleNumber(){
+//        _simpleNumber.value?.plus(1)
+        _simpleNumber.value = _simpleNumber.value?.plus(1)
+        Log.d("Simple Number",_simpleNumber.value.toString())
+        Log.d("All Product",_allProduct.value.toString())
+//        viewModelScope.launch {
+//            _productRepository.insert(ProductDataSource().loadProducts()[_simpleNumber.value?:0])
+//        }
+        _allProduct.value = ProductDataSource().loadProducts()
     }
 
     // Define ViewModel factory in a companion object

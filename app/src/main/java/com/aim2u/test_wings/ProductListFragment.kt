@@ -56,7 +56,6 @@ class ProductListFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_product_list, container, false)
         binding = FragmentProductListBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -66,12 +65,28 @@ class ProductListFragment : Fragment() {
 //            ProductDataSource().loadProducts()
 
 
+
         myDataSet = sharedViewModel.allProduct.value ?: listOf()
         Log.d("List Product bef", myDataSet.toString())
-
-        if(myDataSet.isEmpty()){
-            sharedViewModel.setAllProduct()
+        sharedViewModel.simpleNumber.observe(viewLifecycleOwner){
+            //fixme pakai resource
+            binding.efab.text = "CHECKOUT ($it)"
+            Log.d("simpleNumber:", "$it")
         }
+        binding.efab.setOnClickListener{
+            sharedViewModel.incrementSimpleNumber()
+            Log.d("efab onClick:", "${sharedViewModel.simpleNumber.value}")
+//            val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment("ABC")
+//            findNavController(this).navigate(action)
+            val appContext = context?.applicationContext
+            Toast.makeText(appContext, "${sharedViewModel.simpleNumber.value}", Toast.LENGTH_SHORT).show()
+            sharedViewModel.setAllProduct()
+
+        }
+
+//        if(myDataSet.isEmpty()){
+//            sharedViewModel.setAllProduct()
+//        }
 
         Log.d("List Product", myDataSet.toString())
 //        val myImmutableDataSet = myDataSet
@@ -79,7 +94,7 @@ class ProductListFragment : Fragment() {
         val recyclerView = binding.productListId
         recyclerView.layoutManager = LinearLayoutManager(context)
         // cari cara amannya
-        val adapter = ItemAdapter(myDataSet){
+        val adapter = ItemAdapter{
                 product ->
             Toast.makeText(
                 context,
@@ -91,15 +106,18 @@ class ProductListFragment : Fragment() {
             findNavController(this).navigate(action)
 
         }
-//        sharedViewModel.allProduct.observe(viewLifecycleOwner) {
-//            adapter.submitList(it) = it
-//        }
+
 
 
 //        sharedViewModel.allProduct.observe(viewLifecycleOwner, Observer {
 //
 //        })
         recyclerView.adapter = adapter
+        sharedViewModel.allProduct.observe(viewLifecycleOwner) {
+                listProduct ->
+            listProduct.let { adapter.submitList(it) }
+        }
+
         // size of this RecyclerView is fixed
 //        recyclerView.setHasFixedSize(true)
     }

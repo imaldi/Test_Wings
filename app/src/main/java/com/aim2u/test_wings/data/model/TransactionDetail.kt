@@ -3,10 +3,11 @@ package com.aim2u.test_wings.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "transaction_detail",
-    primaryKeys = ["document_code","document_number"],
+//    primaryKeys = ["document_code","document_number"],
 //    ignoredColumns = [
 //        "product_name",
 //        "discount",
@@ -17,6 +18,9 @@ import androidx.room.Entity
 //    ]
 )
 data class TransactionDetail(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Long,
     @ColumnInfo(name = "document_code")
     val documentCode: String,
     @ColumnInfo(name = "document_number")

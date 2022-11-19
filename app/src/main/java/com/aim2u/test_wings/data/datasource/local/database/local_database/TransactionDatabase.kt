@@ -2,6 +2,7 @@ package com.aim2u.test_wings.data.datasource.local.database.local_database
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.asLiveData
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -46,10 +47,10 @@ abstract class TransactionDatabase : RoomDatabase() {
                     var productDao = database.productDao()
 
                     // Delete all content here.
-                    productDao.deleteAll()
+//                    productDao.deleteAll()
 
                     productDao.insertAll(*ProductDataSource().loadProducts().toTypedArray())
-                    Log.d("Callback Database",productDao.getAll().toString())
+                    Log.d("Callback Database: ",productDao.getAll().asLiveData().value.toString())
                 }
             }
         }
@@ -78,7 +79,8 @@ abstract class TransactionDatabase : RoomDatabase() {
                     TransactionDatabase::class.java,
                     "penjualan"
                 )
-//                    .addCallback(PenjualanDatabaseCallback(scope))
+                    .addCallback(PenjualanDatabaseCallback(scope))
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 // return instance
