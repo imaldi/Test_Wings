@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.room.ColumnInfo
 import com.aim2u.test_wings.R
 import com.aim2u.test_wings.WingsApplication
 import com.aim2u.test_wings.adapter.CheckoutItemAdapter
+import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.FragmentCheckoutBinding
 import com.aim2u.test_wings.databinding.FragmentProductDetailBinding
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
@@ -45,7 +47,7 @@ class CheckoutFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentCheckoutBinding.inflate(inflater, container, false)
         return binding.root
@@ -57,22 +59,38 @@ class CheckoutFragment : Fragment() {
 
         }
 
-        var adapter = CheckoutItemAdapter({
+        sharedViewModel.selectedProduct.observe(viewLifecycleOwner){
+
+        }
+
+        val adapter = CheckoutItemAdapter({
             transactionDetail ->
         },{
-            selected, index ->
-        })
+            productCode -> sharedViewModel.selectedProduct.value?.first{it.productCode == productCode} ?: Product(
+            productCode = "",
+            productName = "",
+            price= 0,
+            currency = "",
+            discount = 0,
+            dimension = "",
+            unit= "",
+            )
+        },
+            { index, text ->
+//                sharedViewModel.updateSelectedTransDetail(index,text)
+                sharedViewModel.updateQuantityList(index,text.toInt())
+                binding.totalView.text = "Total: ${sharedViewModel.transactionDetail.value?.map { it.price * (sharedViewModel.quantityList.value?.get(index) ?: 1) }?.reduce {sebelum, sesudah -> sebelum + sesudah }}"
+
+            }
+            )
         binding.transactioDetailList.adapter = adapter
         sharedViewModel.transactionDetail.observe(viewLifecycleOwner){ listTransactionDetail ->
             listTransactionDetail.let { adapter.submitList(it) }
-
-            Toast.makeText(context?.applicationContext, "TransDetail All Size: ${listTransactionDetail?.size}", Toast.LENGTH_SHORT)
-                .show()
         }
 
         binding.efab.setOnClickListener{
             sharedViewModel.clearTransactionHeaderAndSelectedProduct()
-            Toast.makeText(context?.applicationContext, "Success Checkout: ${sharedViewModel.transactionHeader.value == null}", Toast.LENGTH_SHORT)
+            Toast.makeText(context?.applicationContext, "Success Checkout", Toast.LENGTH_SHORT)
                 .show()
             findNavController().navigateUp()
         }

@@ -12,38 +12,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <TextView
-            android:id="@+id/productName"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello Item" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ic_launcher_foreground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
 
-        <TextView
-            android:id="@+id/productPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello Item" />
+                >
 
-        <Button
-            android:id="@+id/button_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/teal_200"
-            android:text="Beli"
-            />
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:checked="@{isChecked}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/productName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hello Item" />
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hello Item" />
+
+                <Button
+                    android:id="@+id/button_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/teal_200"
+                    android:text="Beli"
+                    />
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:checked="@{isChecked}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
 </layout>

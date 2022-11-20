@@ -1,7 +1,6 @@
 package com.aim2u.test_wings.ui.shared_view_model
 
 import android.util.Log
-import androidx.databinding.adapters.AdapterViewBindingAdapter.OnItemSelected
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.aim2u.test_wings.data.model.Login
@@ -36,12 +35,18 @@ class SharedViewModel(
     // fixme ganti MutableList ke List nanti2
     val selectedProduct: LiveData<MutableList<Product>> = _selectedProduct
 
+    private val _detailedProduct = MutableLiveData<Product>()
+    val detailedProduct: LiveData<Product> = _detailedProduct
+
     private val _transactionHeader = MutableLiveData<TransactionHeader?>()
     val transactionHeader: LiveData<TransactionHeader?> = _transactionHeader
 
     private val _transactionDetail =
         MutableLiveData<MutableList<TransactionDetail>>(mutableListOf())
     val transactionDetail: LiveData<MutableList<TransactionDetail>> = _transactionDetail
+
+    private val _quantityList = MutableLiveData<MutableList<Int>>()
+    val quantityList = _quantityList
 
     private val _simpleNumber = MutableLiveData<Int>(0)
     val simpleNumber: LiveData<Int> = _simpleNumber
@@ -54,6 +59,11 @@ class SharedViewModel(
         Log.d("All Product", allProduct.value.toString())
     }
 
+    fun setDetailedProduct(productCode: String) {
+        _detailedProduct.value =
+            _selectedProduct.value?.filter { it.productCode == productCode }?.toList()?.first()
+    }
+
     fun updateLoginUser(loggedInUser: Login) {
         _loggedInUser.value = loggedInUser
     }
@@ -63,14 +73,27 @@ class SharedViewModel(
 //        selectedProduct.value?.set()
     }
 
+//    fun updateSelectedTransDetail(index: Int,newValue:String){
+//        if(_transactionDetail.value != null && (transactionDetail.value?.isNotEmpty() ?: false)){
+//            _transactionDetail.value?.set(index,transactionDetail.value?.get(index)?.copy(quantity = newValue)!!)
+//        }
+//    }
+
+    fun updateQuantityList(index: Int,newValue:Int){
+        if(_quantityList.value != null && (quantityList.value?.isNotEmpty() ?: false)){
+            _quantityList.value?.set(index,newValue)
+        }
+    }
+
     fun setSelectedProductList(
         resetSelected: Boolean = false
 //        index: Int, selected: Boolean, product: Product
     ) {
-        if(resetSelected)
-        _selectedProduct.value = allProduct.value?.map{ it.isSelected = false; it}?.toMutableList()
+        if (resetSelected)
+            _selectedProduct.value =
+                allProduct.value?.map { it.isSelected = false; it }?.toMutableList()
         else
-        _selectedProduct.value = allProduct.value?.toMutableList()
+            _selectedProduct.value = allProduct.value?.toMutableList()
 
 //        selectedProduct.value?.set(index, Pair(product,selected))
     }
@@ -81,7 +104,7 @@ class SharedViewModel(
 //        _selectedProduct.value.set(index,_selectedProduct.value.get(index).copy(isS))
     }
 
-    fun clearTransactionHeaderAndSelectedProduct(){
+    fun clearTransactionHeaderAndSelectedProduct() {
         _transactionHeader.value = null
         _transactionDetail.value = mutableListOf()
 //        _selectedProduct.value?.clear()
@@ -122,7 +145,8 @@ class SharedViewModel(
                             )
                         }?.toList() ?: listOf()
                     _transactionDetail.value?.clear()
-                    _transactionDetail.value?.addAll(transactionDetailNewItems);
+                    _transactionDetail.value?.addAll(transactionDetailNewItems)
+                    _quantityList.value?.addAll(transactionDetailNewItems.map { it.quantity.toInt() }.toMutableList())
                 }
                 // nanti cari tau copy nya ni copywith ga
 //                var a = _transactionHeader.value?.copy(user = "Aldi")

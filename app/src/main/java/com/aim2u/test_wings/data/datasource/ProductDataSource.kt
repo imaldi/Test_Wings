@@ -11,7 +11,7 @@ class ProductDataSource {
                 price = 15000,
                 discount = 10,
                 currency = "Rp",
-                dimension = "-",
+                dimension = "15 cm x 10 cm",
                 unit = "PCS",
             ),
             Product(
@@ -20,7 +20,7 @@ class ProductDataSource {
                 price = 11000,
                 discount = 5,
                 currency = "Rp",
-                dimension = "-",
+                dimension = "10 cm x 8 cm",
                 unit = "PCS",
             ),
             Product(
@@ -29,7 +29,7 @@ class ProductDataSource {
                 price = 18000,
                 discount = 0,
                 currency = "Rp",
-                dimension = "-",
+                dimension = "10 cm x 12 cm",
                 unit = "PCS",
             ),
             Product(
@@ -38,7 +38,7 @@ class ProductDataSource {
                 price = 10000,
                 discount = 15,
                 currency = "Rp",
-                dimension = "-",
+                dimension = "10 cm x 8 cm",
                 unit = "PCS",
             ),
             Product(
@@ -47,7 +47,7 @@ class ProductDataSource {
                 price = 14000,
                 discount = 12,
                 currency = "Rp",
-                dimension = "-",
+                dimension = "10 cm x 7 cm",
                 unit = "PCS",
             ),
         )

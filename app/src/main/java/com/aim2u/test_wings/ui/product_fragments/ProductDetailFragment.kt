@@ -1,14 +1,19 @@
 package com.aim2u.test_wings.ui.product_fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.aim2u.test_wings.WingsApplication
 import com.aim2u.test_wings.ui.product_fragments.ProductDetailFragmentArgs
 import com.aim2u.test_wings.databinding.FragmentProductDetailBinding
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
+import com.aim2u.test_wings.ui.shared_view_model.SharedViewModel
+import com.aim2u.test_wings.ui.shared_view_model.SharedViewModelFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +29,18 @@ class ProductDetailFragment : Fragment() {
     private lateinit var binding: FragmentProductDetailBinding
     private val safeArgs: ProductDetailFragmentArgs by navArgs()
     private var productCode: String? = null
+    private var productName: String? = null
+    private val sharedViewModel: SharedViewModel by activityViewModels {
+        // FIXME ini mungkin error karena null
+        var application = (activity?.application as WingsApplication)
+        Log.d("activityViewModels", "Hello")
+
+        SharedViewModelFactory(
+            application.productRepository,
+            application.transactionHeaderRepository,
+            application.transactionDetailRepository,
+        )
+    }
 //    by lazy {
 //    }
 
@@ -40,8 +57,17 @@ class ProductDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         productCode = safeArgs.productId
+        productName = safeArgs.productName
+        val immProductCode = productCode ?: ""
+        val immProductName = productName ?: ""
 
-        binding.productCode.text = productCode
+        sharedViewModel.detailedProduct.observe(viewLifecycleOwner){
+            binding.productName.text = immProductName
+            binding.priceTextView.text = it.price.toString()
+            binding.dimensionTextView.text = it.dimension
+            binding.unitTextView.text = it.unit
+        }
+        sharedViewModel.setDetailedProduct(immProductCode)
     }
 
     companion object {

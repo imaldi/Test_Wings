@@ -81,13 +81,14 @@ class ProductListFragment : Fragment() {
 //            binding.efab.text = "CHECKOUT"
 //            Log.d("simpleNumber:", "$it")
 //        }
+        sharedViewModel.transactionHeader.observe(viewLifecycleOwner){
+
+        }
         binding.efab.setOnClickListener {
 //            sharedViewModel.incrementSimpleNumber()
             Log.d("efab onClick:", "${sharedViewModel.simpleNumber.value}")
             sharedViewModel.initTransactionHeader()
-            val appContext = context?.applicationContext
-            Toast.makeText(appContext, "${sharedViewModel.transactionHeader.value?.documentCode}", Toast.LENGTH_SHORT)
-                .show()
+
             val action = ProductListFragmentDirections.actionProductListFragmentToCheckoutFragment()
             findNavController().navigate(action)
 
@@ -98,26 +99,17 @@ class ProductListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         // cari cara amannya
         val adapter = ItemAdapter( { product ->
-//            Toast.makeText(
-//                context,
-//                "${product.productName}",
-//                Toast.LENGTH_SHORT
-//            ).show()
 
             val action =
                 ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(
-                    product.productCode
+                    product.productCode,
+                    product.productName
                 )
             findNavController().navigate(action)
 
         },{
             selected, index ->
             sharedViewModel.setSelectedProduct(index,selected)
-//            Toast.makeText(context?.applicationContext, "Produk Selected: ${sharedViewModel . selectedProduct.value?.get(index)?.isSelected}", Toast.LENGTH_SHORT)
-//                .show()
-//            sharedViewModel.setSelectedProduct(
-//                    index, selected, product
-//            )
         },)
 
         recyclerView.adapter = adapter
@@ -129,8 +121,10 @@ class ProductListFragment : Fragment() {
         sharedViewModel.selectedProduct.observe(viewLifecycleOwner){ listProduct ->
             listProduct.let { adapter.submitList(it) }
 
-            Toast.makeText(context?.applicationContext, "selectedProduct Size: ${listProduct?.size}", Toast.LENGTH_SHORT)
-                .show()
+
+        }
+        sharedViewModel.quantityList.observe(viewLifecycleOwner){
+
         }
 
 
