@@ -55,7 +55,7 @@ ListAdapter<Product, ItemAdapter.ItemViewHolder>(ProductComparator())
         }
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.productCode == newItem.productCode
+            return (oldItem.productCode == newItem.productCode && oldItem.isSelected == newItem.isSelected)
         }
     }
 

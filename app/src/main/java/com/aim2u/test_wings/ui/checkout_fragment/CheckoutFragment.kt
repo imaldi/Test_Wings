@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.aim2u.test_wings.R
 import com.aim2u.test_wings.WingsApplication
 import com.aim2u.test_wings.adapter.CheckoutItemAdapter
@@ -67,6 +68,13 @@ class CheckoutFragment : Fragment() {
 
             Toast.makeText(context?.applicationContext, "TransDetail All Size: ${listTransactionDetail?.size}", Toast.LENGTH_SHORT)
                 .show()
+        }
+
+        binding.efab.setOnClickListener{
+            sharedViewModel.clearTransactionHeaderAndSelectedProduct()
+            Toast.makeText(context?.applicationContext, "Success Checkout: ${sharedViewModel.transactionHeader.value == null}", Toast.LENGTH_SHORT)
+                .show()
+            findNavController().navigateUp()
         }
     }
 

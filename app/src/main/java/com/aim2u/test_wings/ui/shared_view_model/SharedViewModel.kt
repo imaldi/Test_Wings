@@ -64,9 +64,14 @@ class SharedViewModel(
     }
 
     fun setSelectedProductList(
+        resetSelected: Boolean = false
 //        index: Int, selected: Boolean, product: Product
     ) {
+        if(resetSelected)
+        _selectedProduct.value = allProduct.value?.map{ it.isSelected = false; it}?.toMutableList()
+        else
         _selectedProduct.value = allProduct.value?.toMutableList()
+
 //        selectedProduct.value?.set(index, Pair(product,selected))
     }
 
@@ -74,6 +79,13 @@ class SharedViewModel(
         _selectedProduct.value?.get(index)?.isSelected =
             !(_selectedProduct.value?.get(index)?.isSelected ?: true)
 //        _selectedProduct.value.set(index,_selectedProduct.value.get(index).copy(isS))
+    }
+
+    fun clearTransactionHeaderAndSelectedProduct(){
+        _transactionHeader.value = null
+        _transactionDetail.value = mutableListOf()
+//        _selectedProduct.value?.clear()
+        setSelectedProductList(resetSelected = true)
     }
 
     fun initTransactionHeader() {
