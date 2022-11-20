@@ -45,7 +45,9 @@ abstract class TransactionDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch {
                     var productDao = database.productDao()
+                    var loginDao = database.loginDao()
 
+                    loginDao.insert(Login(user = "Aldi", password = "abc1234"))
                     productDao.insertAll(*ProductDataSource().loadProducts().toTypedArray())
                 }
             }

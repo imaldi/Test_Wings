@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aim2u.test_wings.adapter.ItemAdapter
 import com.aim2u.test_wings.data.datasource.ProductDataSource
 import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
+import com.aim2u.test_wings.ui.login_fragment.ui.login.LoginFragmentDirections
 import com.aim2u.test_wings.ui.shared_view_model.SharedViewModel
 import com.aim2u.test_wings.ui.shared_view_model.SharedViewModelFactory
 
@@ -33,7 +33,6 @@ private const val ARG_PARAM2 = "param2"
 class ProductListFragment : Fragment() {
     private lateinit var binding: FragmentProductListBinding
     private val sharedViewModel: SharedViewModel by activityViewModels {
-//        viewModelFactory {
         // FIXME ini mungkin error karena null
         var application = (activity?.application as WingsApplication)
         Log.d("activityViewModels", "Hello")
@@ -43,10 +42,8 @@ class ProductListFragment : Fragment() {
             application.transactionHeaderRepository,
             application.transactionDetailRepository,
         )
-//        }
     }
     private lateinit var myDataSet: List<Product>
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +52,27 @@ class ProductListFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_product_list, container, false)
         binding = FragmentProductListBinding.inflate(inflater, container, false)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        val isLogin = sharedPref?.getBoolean(getString(R.string.login_preference_file_key), false)
+
+        if(isLogin!!) {
+            sharedViewModel.updateLoginStatus(isLogin)
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        sharedViewModel.isLoggedIn.observe(viewLifecycleOwner){
+            if(!(it ?: false)) {
+//                Toast.makeText(requireContext(),"Shared Pref Content: $isLogin",Toast.LENGTH_SHORT).show()
+                findNavController().navigate(ProductListFragmentDirections.actionProductListFragmentToLoginFragment())
+            }
+        }
+
 
         myDataSet = sharedViewModel.allProduct.value ?: listOf()
         Log.d("List Product bef", myDataSet.toString())
@@ -94,7 +107,7 @@ class ProductListFragment : Fragment() {
                 ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(
                     product.productCode
                 )
-            findNavController(this).navigate(action)
+            findNavController().navigate(action)
 
         }
 

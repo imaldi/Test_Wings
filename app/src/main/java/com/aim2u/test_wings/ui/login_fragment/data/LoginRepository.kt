@@ -1,5 +1,8 @@
 package com.aim2u.test_wings.ui.login_fragment.data
 
+import androidx.annotation.WorkerThread
+import com.aim2u.test_wings.data.datasource.local.database.dao.LoginDao
+import com.aim2u.test_wings.data.model.Login
 import com.aim2u.test_wings.ui.login_fragment.data.model.LoggedInUser
 
 /**
@@ -10,7 +13,7 @@ import com.aim2u.test_wings.ui.login_fragment.data.model.LoggedInUser
 class LoginRepository(val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
+    var user: Login? = null
         private set
 
     val isLoggedIn: Boolean
@@ -24,10 +27,11 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     fun logout() {
         user = null
-        dataSource.logout()
+//        loginDao.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    @WorkerThread
+    suspend fun login(username: String, password: String): Result<Login> {
         // handle login
         val result = dataSource.login(username, password)
 
@@ -38,7 +42,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
         return result
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
+    private fun setLoggedInUser(loggedInUser: Login) {
         this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore

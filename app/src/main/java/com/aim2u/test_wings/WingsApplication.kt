@@ -5,6 +5,7 @@ import com.aim2u.test_wings.data.datasource.local.database.local_database.Transa
 import com.aim2u.test_wings.data.repository.ProductRepository
 import com.aim2u.test_wings.data.repository.TransactionDetailRepository
 import com.aim2u.test_wings.data.repository.TransactionHeaderRepository
+import com.aim2u.test_wings.ui.login_fragment.data.LoginDataSource
 import com.aim2u.test_wings.ui.login_fragment.data.LoginRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +19,7 @@ class WingsApplication : Application() {
     val database by lazy { TransactionDatabase.getDatabase(this, applicationScope) }
 
     // FIXME fix login repository
-//    val loginRepository by lazy { LoginRepository(database.loginDao()) }
+    val loginRepository by lazy { LoginRepository(LoginDataSource(database.loginDao())) }
     val productRepository by lazy { ProductRepository(database.productDao()) }
     val transactionHeaderRepository by lazy { TransactionHeaderRepository(database.transactionHeaderDao()) }
     val transactionDetailRepository by lazy { TransactionDetailRepository(database.transactionDetailDao()) }
