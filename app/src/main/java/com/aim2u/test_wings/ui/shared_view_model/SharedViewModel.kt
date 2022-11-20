@@ -15,23 +15,20 @@ import com.aim2u.test_wings.data.repository.ProductRepository
 import com.aim2u.test_wings.data.repository.TransactionDetailRepository
 import com.aim2u.test_wings.data.repository.TransactionHeaderRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SharedViewModel(
     private val _productRepository: ProductRepository,
     private val _transactionHeaderRepository: TransactionHeaderRepository,
     private val _transactionDetailRepository: TransactionDetailRepository,
-    private val scope: CoroutineScope
 ) : ViewModel() {
     private val _isLoggedIn = MutableLiveData<Boolean>(false)
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
-    private val _allProduct = MutableLiveData<List<Product>>(
-//    _productRepository.allProduct.asLiveData().value
-    listOf()
-    )
-    val allProduct: LiveData<List<Product>> = _allProduct
+    val allProduct: LiveData<List<Product>> = _productRepository.allProduct.asLiveData()
 
     private val _selectedProduct = MutableLiveData<List<Product>>(listOf())
     val selectedProduct: LiveData<List<Product>> = _selectedProduct
@@ -45,46 +42,21 @@ class SharedViewModel(
     private val _simpleNumber = MutableLiveData<Int>(0)
     val simpleNumber: LiveData<Int> = _simpleNumber
 
-    fun setAllProduct() {
-//        var products: List<Product> = listOf()
-//        scope.launch {
-////            _productRepository.deleteAll()
-//            val rowIds = _productRepository.insertAll(ProductDataSource().loadProducts())
-//            products = _productRepository.allProduct.asLiveData().value ?: listOf()
-//
-//            Log.d("Products rowIds",rowIds.toString())
-//        }
-//            _allProduct.value = ProductDataSource().loadProducts()
-////            _allProduct.value = products
-    }
-
-    fun incrementSimpleNumber(){
-//        _simpleNumber.value?.plus(1)
+    fun incrementSimpleNumber() {
+        // failed gini
+        // _simpleNumber.value?.plus(1)
         _simpleNumber.value = _simpleNumber.value?.plus(1)
-        Log.d("Simple Number",_simpleNumber.value.toString())
-        Log.d("All Product",_allProduct.value.toString())
-//        viewModelScope.launch {
-//            _productRepository.insert(ProductDataSource().loadProducts()[_simpleNumber.value?:0])
-//        }
-        _allProduct.value = ProductDataSource().loadProducts()
+        Log.d("Simple Number", _simpleNumber.value.toString())
+        Log.d("All Product", allProduct.value.toString())
     }
-
-    // Define ViewModel factory in a companion object
-//    companion object {
-//
-//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//
-//        }
-//    }
-
 }
 
 class SharedViewModelFactory(
     private val _productRepository: ProductRepository,
     private val _transactionHeaderRepository: TransactionHeaderRepository,
     private val _transactionDetailRepository: TransactionDetailRepository,
-    private val scope: CoroutineScope
-): ViewModelProvider.Factory{
+//    private val scope: CoroutineScope
+) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
         modelClass: Class<T>,
@@ -95,7 +67,6 @@ class SharedViewModelFactory(
                 _productRepository,
                 _transactionHeaderRepository,
                 _transactionDetailRepository,
-                scope
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

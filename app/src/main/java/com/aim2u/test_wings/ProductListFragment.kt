@@ -32,18 +32,17 @@ private const val ARG_PARAM2 = "param2"
  */
 class ProductListFragment : Fragment() {
     private lateinit var binding: FragmentProductListBinding
-    private val sharedViewModel: SharedViewModel by activityViewModels{
+    private val sharedViewModel: SharedViewModel by activityViewModels {
 //        viewModelFactory {
-            // FIXME ini mungkin error karena null
-            var application = (activity?.application as WingsApplication)
-        Log.d("activityViewModels","Hello")
+        // FIXME ini mungkin error karena null
+        var application = (activity?.application as WingsApplication)
+        Log.d("activityViewModels", "Hello")
 
         SharedViewModelFactory(
-                application.productRepository,
-                application.transactionHeaderRepository,
-                application.transactionDetailRepository,
-                application.applicationScope
-            )
+            application.productRepository,
+            application.transactionHeaderRepository,
+            application.transactionDetailRepository,
+        )
 //        }
     }
     private lateinit var myDataSet: List<Product>
@@ -62,70 +61,50 @@ class ProductListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//            ProductDataSource().loadProducts()
-
-
-
         myDataSet = sharedViewModel.allProduct.value ?: listOf()
         Log.d("List Product bef", myDataSet.toString())
-        sharedViewModel.simpleNumber.observe(viewLifecycleOwner){
+        sharedViewModel.simpleNumber.observe(viewLifecycleOwner) {
             //fixme pakai resource
             binding.efab.text = "CHECKOUT ($it)"
             Log.d("simpleNumber:", "$it")
         }
-        binding.efab.setOnClickListener{
+        binding.efab.setOnClickListener {
             sharedViewModel.incrementSimpleNumber()
             Log.d("efab onClick:", "${sharedViewModel.simpleNumber.value}")
 //            val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment("ABC")
 //            findNavController(this).navigate(action)
             val appContext = context?.applicationContext
-            Toast.makeText(appContext, "${sharedViewModel.simpleNumber.value}", Toast.LENGTH_SHORT).show()
-            sharedViewModel.setAllProduct()
+            Toast.makeText(appContext, "${sharedViewModel.simpleNumber.value}", Toast.LENGTH_SHORT)
+                .show()
 
         }
 
-//        if(myDataSet.isEmpty()){
-//            sharedViewModel.setAllProduct()
-//        }
-
         Log.d("List Product", myDataSet.toString())
-//        val myImmutableDataSet = myDataSet
-
         val recyclerView = binding.productListId
         recyclerView.layoutManager = LinearLayoutManager(context)
         // cari cara amannya
-        val adapter = ItemAdapter{
-                product ->
+        val adapter = ItemAdapter { product ->
             Toast.makeText(
                 context,
                 "${product.productName}",
                 Toast.LENGTH_SHORT
             ).show()
 
-            val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(product.productCode)
+            val action =
+                ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(
+                    product.productCode
+                )
             findNavController(this).navigate(action)
 
         }
 
-
-
-//        sharedViewModel.allProduct.observe(viewLifecycleOwner, Observer {
-//
-//        })
         recyclerView.adapter = adapter
-        sharedViewModel.allProduct.observe(viewLifecycleOwner) {
-                listProduct ->
+        sharedViewModel.allProduct.observe(viewLifecycleOwner) { listProduct ->
             listProduct.let { adapter.submitList(it) }
         }
-
-        // size of this RecyclerView is fixed
-//        recyclerView.setHasFixedSize(true)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
 
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of

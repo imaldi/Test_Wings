@@ -18,10 +18,8 @@ import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.ListItemBinding
 
 class ItemAdapter(
-//    private val dataset: List<Product>,
     val onClick: (Product) -> Unit
     ) :
-//    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>()
 ListAdapter<Product, ItemAdapter.ItemViewHolder>(ProductComparator())
 {
 
@@ -32,19 +30,13 @@ ListAdapter<Product, ItemAdapter.ItemViewHolder>(ProductComparator())
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val current = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClick(current)
+        }
         holder.bind(current)
-
-//        val product: Product = dataset[position]
-//        holder.itemView.setOnClickListener {
-//            onClick(product)
-//        }
-//        holder.bind(product)
     }
-//
-//    override fun getItemCount(): Int = dataset.size
 
     class ItemViewHolder(private val itemBinding: ListItemBinding): RecyclerView.ViewHolder(itemBinding.root){
-//        val textView: TextView = ActivityProductListBinding.inflate(LayoutInflater.from(parent))
         fun bind(product: Product) {
             itemBinding.productName.text = product.productName
             itemBinding.productPrice.text = product.price.toString()

@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(vararg product: Product)
+    suspend fun insertAll(vararg product: Product)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(product: Product)
+    suspend fun insert(product: Product)
 
     @Delete
-    fun delete(user: Product)
+    suspend fun delete(user: Product)
 
     @Query("DELETE FROM product_table")
     suspend fun deleteAll()

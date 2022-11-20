@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "transaction_detail",
-//    primaryKeys = ["document_code","document_number"],
+    primaryKeys = ["document_code","product_code"],
 //    ignoredColumns = [
 //        "product_name",
 //        "discount",
@@ -18,8 +18,6 @@ import androidx.room.PrimaryKey
 //    ]
 )
 data class TransactionDetail(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     val id: Long,
     @ColumnInfo(name = "document_code")
     val documentCode: String,

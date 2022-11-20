@@ -17,6 +17,7 @@ import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.data.model.TransactionDetail
 import com.aim2u.test_wings.data.model.TransactionHeader
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 //class TransactionDatabase {
@@ -40,17 +41,12 @@ abstract class TransactionDatabase : RoomDatabase() {
 
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            Log.d("Callback onCreate",ProductDataSource().loadProducts().toString())
 
             INSTANCE?.let { database ->
                 scope.launch {
                     var productDao = database.productDao()
 
-                    // Delete all content here.
-//                    productDao.deleteAll()
-
                     productDao.insertAll(*ProductDataSource().loadProducts().toTypedArray())
-                    Log.d("Callback Database: ",productDao.getAll().asLiveData().value.toString())
                 }
             }
         }
@@ -80,7 +76,6 @@ abstract class TransactionDatabase : RoomDatabase() {
                     "penjualan"
                 )
                     .addCallback(PenjualanDatabaseCallback(scope))
-                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 // return instance
