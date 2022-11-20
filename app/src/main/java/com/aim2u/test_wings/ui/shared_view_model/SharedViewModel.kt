@@ -1,6 +1,7 @@
 package com.aim2u.test_wings.ui.shared_view_model
 
 import android.util.Log
+import androidx.databinding.adapters.AdapterViewBindingAdapter.OnItemSelected
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.aim2u.test_wings.data.model.Login
@@ -23,9 +24,11 @@ class SharedViewModel(
     val loggedInUser: LiveData<Login?> = _loggedInUser
 
     val allProduct: LiveData<List<Product>> = _productRepository.allProduct.asLiveData()
+//    val listProduct = allProduct.value
 
-    private val _selectedProduct = MutableLiveData<List<Product>>(listOf())
-    val selectedProduct: LiveData<List<Product>> = _selectedProduct
+    private val _selectedProduct: MutableLiveData<MutableList<Product>> = MutableLiveData(
+        mutableListOf<Product>())
+    val selectedProduct: LiveData<MutableList<Product>> = _selectedProduct
 
     private val _transactionHeader = MutableLiveData<TransactionHeader?>()
     val transactionHeader: LiveData<TransactionHeader?> = _transactionHeader
@@ -51,6 +54,18 @@ class SharedViewModel(
     fun updateLoginStatus(isLogin: Boolean){
         _isLoggedIn.value = isLogin
     }
+
+    fun setSelectedProductList(
+//        index: Int, selected: Boolean, product: Product
+    ){
+        _selectedProduct.value = allProduct.value?.toMutableList()
+//        selectedProduct.value?.set(index, Pair(product,selected))
+    }
+    fun setSelectedProduct(index: Int, selected: Boolean){
+        _selectedProduct.value?.get(index)?.isSelected = !(_selectedProduct.value?.get(index)?.isSelected ?: true)
+//        _selectedProduct.value.set(index,_selectedProduct.value.get(index).copy(isS))
+    }
+
 }
 
 class SharedViewModelFactory(

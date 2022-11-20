@@ -2,6 +2,7 @@ package com.aim2u.test_wings.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "product_table")
@@ -21,4 +22,8 @@ data class Product(
     val dimension: String,
     @ColumnInfo(name = "unit")
     val unit: String,
-)
+
+){
+    @Ignore
+    var isSelected: Boolean = false
+}

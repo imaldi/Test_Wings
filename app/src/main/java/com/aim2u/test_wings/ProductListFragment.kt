@@ -9,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aim2u.test_wings.adapter.ItemAdapter
-import com.aim2u.test_wings.data.datasource.ProductDataSource
 import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
-import com.aim2u.test_wings.ui.login_fragment.ui.login.LoginFragmentDirections
 import com.aim2u.test_wings.ui.shared_view_model.SharedViewModel
 import com.aim2u.test_wings.ui.shared_view_model.SharedViewModelFactory
 
@@ -74,6 +71,7 @@ class ProductListFragment : Fragment() {
         }
 
 
+
         myDataSet = sharedViewModel.allProduct.value ?: listOf()
         Log.d("List Product bef", myDataSet.toString())
         sharedViewModel.simpleNumber.observe(viewLifecycleOwner) {
@@ -96,7 +94,7 @@ class ProductListFragment : Fragment() {
         val recyclerView = binding.productListId
         recyclerView.layoutManager = LinearLayoutManager(context)
         // cari cara amannya
-        val adapter = ItemAdapter { product ->
+        val adapter = ItemAdapter( { product ->
             Toast.makeText(
                 context,
                 "${product.productName}",
@@ -109,12 +107,30 @@ class ProductListFragment : Fragment() {
                 )
             findNavController().navigate(action)
 
-        }
+        },{
+            selected, index ->
+            sharedViewModel.setSelectedProduct(index,selected)
+            Toast.makeText(context?.applicationContext, "Produk Selected: ${sharedViewModel . selectedProduct.value?.get(index)?.isSelected}", Toast.LENGTH_SHORT)
+                .show()
+//            sharedViewModel.setSelectedProduct(
+//                    index, selected, product
+//            )
+        },)
 
         recyclerView.adapter = adapter
         sharedViewModel.allProduct.observe(viewLifecycleOwner) { listProduct ->
-            listProduct.let { adapter.submitList(it) }
+//            listProduct.let { adapter.submitList(it) }
+            sharedViewModel.setSelectedProductList()
         }
+
+        sharedViewModel.selectedProduct.observe(viewLifecycleOwner){ listProduct ->
+            listProduct.let { adapter.submitList(it) }
+
+            Toast.makeText(context?.applicationContext, "Produk All Size: ${listProduct?.size}", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+
     }
 
 

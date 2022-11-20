@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_margin="8dp">
 
+    <data>
+        <variable
+            name="isChecked"
+            type="Boolean" />
+    </data>
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,7 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/teal_200"
-            android:text="BUY" />
+            android:text="Beli"
+            />
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:checked="@{isChecked}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
