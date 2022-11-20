@@ -14,8 +14,6 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.aim2u.test_wings.ProductListFragmentDirections
-import com.aim2u.test_wings.R
 import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.ListItemBinding
 
@@ -42,22 +40,12 @@ ListAdapter<Product, ItemAdapter.ItemViewHolder>(ProductComparator())
     class ItemViewHolder(private val itemBinding: ListItemBinding): RecyclerView.ViewHolder(itemBinding.root){
 
         fun bind(product: Product,index: Int, buttonOnClick: (Boolean,Int) -> Unit) {
-//            var buttonSelected = product.isSelected
-//            var liveDataText = MutableLiveData<String>(product.isSelected.toString())
-//                liveData<String> { product.isSelected.toString() }
-//            itemBinding.lifecycleOwner = itemBinding.root
             itemBinding.productName.text = product.productName
             itemBinding.productPrice.text = product.price.toString()
             itemBinding.isChecked = product.isSelected
-//            itemBinding.textButton = liveDataText.value
-//            itemBinding.buttonId.text = buttonSelected.toString()
-//                isTheButtonPressed(index)
             itemBinding.checkBox.setOnClickListener{
-//                buttonSelected = !buttonSelected
-//                itemBinding.textButton = product.isSelected.toString()
                 buttonOnClick(itemBinding.buttonId.isPressed,index)
             }
-//            itemBinding.tvPaymentAmount.text = paymentBean.totalAmount
         }
     }
 

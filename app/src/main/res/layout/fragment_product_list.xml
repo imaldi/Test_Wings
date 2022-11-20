@@ -18,12 +18,13 @@
         android:layout_height="match_parent">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/productListId"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layoutManager="LinearLayoutManager"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productListId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="64dp"
+            android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/efab"
@@ -37,7 +38,7 @@
         android:layout_margin="20dp"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:text="Checkout @{viewModel.simpleNumber}"
+        android:text="Checkout"
         />
 
     </RelativeLayout>

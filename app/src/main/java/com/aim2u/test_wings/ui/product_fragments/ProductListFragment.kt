@@ -1,4 +1,4 @@
-package com.aim2u.test_wings
+package com.aim2u.test_wings.ui.product_fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aim2u.test_wings.R
+import com.aim2u.test_wings.WingsApplication
 import com.aim2u.test_wings.adapter.ItemAdapter
 import com.aim2u.test_wings.data.model.Product
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
@@ -80,13 +82,14 @@ class ProductListFragment : Fragment() {
             Log.d("simpleNumber:", "$it")
         }
         binding.efab.setOnClickListener {
-            sharedViewModel.incrementSimpleNumber()
+//            sharedViewModel.incrementSimpleNumber()
             Log.d("efab onClick:", "${sharedViewModel.simpleNumber.value}")
-//            val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment("ABC")
-//            findNavController(this).navigate(action)
+            sharedViewModel.initTransactionHeader()
             val appContext = context?.applicationContext
-            Toast.makeText(appContext, "${sharedViewModel.simpleNumber.value}", Toast.LENGTH_SHORT)
+            Toast.makeText(appContext, "${sharedViewModel.transactionHeader.value?.documentCode}", Toast.LENGTH_SHORT)
                 .show()
+            val action = ProductListFragmentDirections.actionProductListFragmentToCheckoutFragment()
+            findNavController().navigate(action)
 
         }
 

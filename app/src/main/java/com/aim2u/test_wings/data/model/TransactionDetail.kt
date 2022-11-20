@@ -18,7 +18,6 @@ import androidx.room.PrimaryKey
 //    ]
 )
 data class TransactionDetail(
-    val id: Long,
     @ColumnInfo(name = "document_code")
     val documentCode: String,
     @ColumnInfo(name = "document_number")

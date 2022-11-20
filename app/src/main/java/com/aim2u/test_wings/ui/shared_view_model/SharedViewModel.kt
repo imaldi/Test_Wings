@@ -11,6 +11,9 @@ import com.aim2u.test_wings.data.model.TransactionHeader
 import com.aim2u.test_wings.data.repository.ProductRepository
 import com.aim2u.test_wings.data.repository.TransactionDetailRepository
 import com.aim2u.test_wings.data.repository.TransactionHeaderRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SharedViewModel(
     private val _productRepository: ProductRepository,
@@ -27,14 +30,18 @@ class SharedViewModel(
 //    val listProduct = allProduct.value
 
     private val _selectedProduct: MutableLiveData<MutableList<Product>> = MutableLiveData(
-        mutableListOf<Product>())
+        mutableListOf<Product>()
+    )
+
+    // fixme ganti MutableList ke List nanti2
     val selectedProduct: LiveData<MutableList<Product>> = _selectedProduct
 
     private val _transactionHeader = MutableLiveData<TransactionHeader?>()
     val transactionHeader: LiveData<TransactionHeader?> = _transactionHeader
 
-    private val _transactionDetail = MutableLiveData<List<TransactionDetail>>(listOf())
-    val transactionDetail: LiveData<List<TransactionDetail>> = _transactionDetail
+    private val _transactionDetail =
+        MutableLiveData<MutableList<TransactionDetail>>(mutableListOf())
+    val transactionDetail: LiveData<MutableList<TransactionDetail>> = _transactionDetail
 
     private val _simpleNumber = MutableLiveData<Int>(0)
     val simpleNumber: LiveData<Int> = _simpleNumber
@@ -47,23 +54,69 @@ class SharedViewModel(
         Log.d("All Product", allProduct.value.toString())
     }
 
-    fun updateLoginUser(loggedInUser: Login){
+    fun updateLoginUser(loggedInUser: Login) {
         _loggedInUser.value = loggedInUser
     }
 
-    fun updateLoginStatus(isLogin: Boolean){
+    fun updateLoginStatus(isLogin: Boolean) {
         _isLoggedIn.value = isLogin
+//        selectedProduct.value?.set()
     }
 
     fun setSelectedProductList(
 //        index: Int, selected: Boolean, product: Product
-    ){
+    ) {
         _selectedProduct.value = allProduct.value?.toMutableList()
 //        selectedProduct.value?.set(index, Pair(product,selected))
     }
-    fun setSelectedProduct(index: Int, selected: Boolean){
-        _selectedProduct.value?.get(index)?.isSelected = !(_selectedProduct.value?.get(index)?.isSelected ?: true)
+
+    fun setSelectedProduct(index: Int, selected: Boolean) {
+        _selectedProduct.value?.get(index)?.isSelected =
+            !(_selectedProduct.value?.get(index)?.isSelected ?: true)
 //        _selectedProduct.value.set(index,_selectedProduct.value.get(index).copy(isS))
+    }
+
+    fun initTransactionHeader() {
+        val allowedCharsDocumentCode = ('A'..'Z')
+        var documentCode = (1..3)
+            .map { allowedCharsDocumentCode.random() }
+            .joinToString("")
+        val allowedCharsDocumentNumber = ('0'..'9')
+        var documentNumber = (1..3)
+            .map { allowedCharsDocumentCode.random() }
+            .joinToString("")
+        var isUnique: Boolean
+        viewModelScope.launch(Dispatchers.IO) {
+            isUnique = _transactionHeaderRepository.checkDocumentCodeAndNumber(
+                documentCode,
+                documentNumber
+            )
+            withContext(Dispatchers.Main) {
+                if (isUnique) {
+                    _transactionHeader.value =
+                        TransactionHeader(documentCode, documentNumber, "", 0, "")
+
+                    var transactionDetailNewItems =
+                        _selectedProduct.value?.filter { it.isSelected }?.map {
+                            TransactionDetail(
+                                documentCode,
+                                documentNumber,
+                                quantity = "1",
+                                productCode = it.productCode,
+                                subTotal = "${it.price}",
+                                price = it.price,
+                                unit = it.unit,
+                                currency = it.currency
+                            )
+                        }?.toList() ?: listOf()
+                    _transactionDetail.value?.clear()
+                    _transactionDetail.value?.addAll(transactionDetailNewItems);
+                }
+                // nanti cari tau copy nya ni copywith ga
+//                var a = _transactionHeader.value?.copy(user = "Aldi")
+            }
+        }
+
     }
 
 }

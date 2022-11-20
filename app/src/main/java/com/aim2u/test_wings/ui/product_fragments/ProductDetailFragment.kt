@@ -1,4 +1,4 @@
-package com.aim2u.test_wings
+package com.aim2u.test_wings.ui.product_fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.aim2u.test_wings.ui.product_fragments.ProductDetailFragmentArgs
 import com.aim2u.test_wings.databinding.FragmentProductDetailBinding
 import com.aim2u.test_wings.databinding.FragmentProductListBinding
 

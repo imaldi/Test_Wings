@@ -6,7 +6,7 @@
     app:startDestination="@id/productListFragment">
     <fragment
         android:id="@+id/productListFragment"
-        android:name="com.aim2u.test_wings.ProductListFragment"
+        android:name="com.aim2u.test_wings.ui.product_fragments.ProductListFragment"
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
@@ -15,11 +15,14 @@
         <action
             android:id="@+id/action_productListFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_productListFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.aim2u.test_wings.ProductDetailFragment"
+        android:name="com.aim2u.test_wings.ui.product_fragments.ProductDetailFragment"
         android:label="fragment_product_detail"
         tools:layout="@layout/fragment_product_detail">
         <argument
@@ -35,4 +38,8 @@
             android:id="@+id/action_loginFragment_to_productListFragment"
             app:destination="@id/productListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.aim2u.test_wings.ui.checkout_fragment.CheckoutFragment"
+        android:label="CheckoutFragment" />
 </navigation>

@@ -17,4 +17,7 @@ interface TransactionHeaderDao {
     @Query("SELECT * FROM transaction_header")
     fun getAll(): List<TransactionHeader>
 
+    @Query("SELECT * FROM transaction_header WHERE document_code = :documentCode AND document_number = :documentNumber")
+    fun checkDocumentCodeAndNumber(documentCode: String, documentNumber: String): List<TransactionHeader>
+
 }

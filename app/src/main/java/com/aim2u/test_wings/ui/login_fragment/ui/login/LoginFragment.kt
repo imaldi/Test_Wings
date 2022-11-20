@@ -16,7 +16,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aim2u.test_wings.ProductListFragmentDirections
 import com.aim2u.test_wings.R
 import com.aim2u.test_wings.WingsApplication
 import com.aim2u.test_wings.databinding.FragmentLoginBinding
